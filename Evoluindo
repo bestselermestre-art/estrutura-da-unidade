@@ -1,0 +1,19 @@
+class ATM_Universal:
+    def __init__(self, ambiente="solo"):
+        self.ambiente = ambiente
+        # Ajuste de sensibilidade automático
+        self.ajustes = {
+            "solo": {"ganho": 1.5, "ruido": 0.3},
+            "agua": {"ganho": 2.2, "ruido": 0.1},
+            "gases": {"ganho": 5.0, "ruido": 0.05}
+        }
+
+    def escanear(self, sinal_bruto):
+        config = self.ajustes[self.ambiente]
+        # Aplica a física correta para cada estado da matéria
+        sinal_limpo = np.where(sinal_bruto > config["ruido"], sinal_bruto, 0)
+        return sinal_limpo * config["ganho"]
+
+# Exemplo de uso rápido:
+escaner_marte = ATM_Universal(ambiente="gases") 
+# Agora o sistema sabe que deve ser 5x mais sensível porque gás é ralo!
