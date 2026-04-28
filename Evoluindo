@@ -17,3 +17,34 @@ class ATM_Universal:
 # Exemplo de uso rápido:
 escaner_marte = ATM_Universal(ambiente="gases") 
 # Agora o sistema sabe que deve ser 5x mais sensível porque gás é ralo!
+
+# --- SISTEMA CENTRAL DE CONTROLE ATM ---
+# Este script unifica Energia, Movimento e Sensoriamento
+
+class ATMCore:
+    def __init__(self):
+        print("🔍 Sistema ATM Inicializado em Três Passos/RS")
+        self.energia_ativa = False
+        self.altitude_segura = False
+
+    def check_sistemas(self):
+        # Aqui simulamos a conexão com seus outros repositórios
+        print("\n[!] Checando integridade dos 10 repositórios...")
+        print("[OK] FusionCore: Conectado (Fusão Direta estável)")
+        print("[OK] Nave-Espacial: Motores Inerciais prontos")
+        print("[OK] Assinaturas-de-risco: Banco de dados carregado")
+        self.energia_ativa = True
+
+    def iniciar_missao(self):
+        if self.energia_ativa:
+            print("\n🚀 Iniciando varredura multiespectral...")
+            # Chamada da lógica de 10 para 1
+            print("Analise: Raio-X (Densidade) + Inducao (Metais) unificados.")
+            print("Resultado: Solo seguro para perfuracao.")
+        else:
+            print("❌ Erro: Falha no FusionCore. Sem energia para o Escaner.")
+
+# Execução
+atm = ATMCore()
+atm.check_sistemas()
+atm.iniciar_missao()
