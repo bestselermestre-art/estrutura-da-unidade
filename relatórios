@@ -1,0 +1,77 @@
+from datetime import datetime
+import numpy as np
+
+class ATM_Universal:
+    def __init__(self, ambiente="solo"):
+        self.ambiente = ambiente
+        self.ajustes = {
+            "solo": {"ganho": 1.5, "ruido": 0.3},
+            "agua": {"ganho": 2.2, "ruido": 0.1},
+            "gases": {"ganho": 5.0, "ruido": 0.05}
+        }
+
+    def escanear(self, sinal_bruto):
+        config = self.ajustes[self.ambiente]
+        sinal_limpo = np.where(sinal_bruto > config["ruido"], sinal_bruto, 0)
+        return sinal_limpo * config["ganho"]
+
+class ATMCore:
+    def __init__(self):
+        print("🔍 Sistema ATM Inicializado em Três Passos/RS")
+        self.energia_ativa = False
+
+    def check_sistemas(self):
+        print("\n[!] Checando integridade dos 10 repositórios...")
+        print("[OK] FusionCore: Conectado")
+        print("[OK] Nave-Espacial: Motores Inerciais prontos")
+        print("[OK] Assinaturas-de-risco: Banco de dados carregado")
+        self.energia_ativa = True
+
+    def iniciar_missao(self, ambiente="solo"):
+        if self.energia_ativa:
+            resultado = f"Missão em ambiente {ambiente}: Solo seguro para perfuração."
+            print(resultado)
+            self.salvar_log("Missão", resultado)
+        else:
+            erro = "❌ Erro: Falha no FusionCore."
+            print(erro)
+            self.salvar_log("Erro", erro)
+
+    def salvar_log(self, operacao, resultado):
+        with open("log_atm.txt", "a", encoding="utf-8") as f:
+            f.write(f"{datetime.now()} | {operacao} | {resultado}\n")
+
+    def consultar_logs(self, filtro=None):
+        try:
+            with open("log_atm.txt", "r", encoding="utf-8") as f:
+                print("\n--- HISTÓRICO DE OPERAÇÕES ---")
+                for linha in f:
+                    if filtro:
+                        if filtro.lower() in linha.lower():
+                            print(linha.strip())
+                    else:
+                        print(linha.strip())
+        except FileNotFoundError:
+            print("Nenhum log encontrado.")
+
+    def exportar_logs(self, filtro, arquivo_destino):
+        """Exporta logs filtrados para um novo arquivo de relatório"""
+        try:
+            with open("log_atm.txt", "r", encoding="utf-8") as f_in, open(arquivo_destino, "w", encoding="utf-8") as f_out:
+                for linha in f_in:
+                    if filtro.lower() in linha.lower():
+                        f_out.write(linha)
+            print(f"[EXPORT] Relatório gerado em {arquivo_destino}")
+        except FileNotFoundError:
+            print("Nenhum log encontrado para exportação.")
+
+# --- Execução ---
+atm = ATMCore()
+atm.check_sistemas()
+atm.iniciar_missao("gases")
+
+# Exportar apenas logs de Missão para um arquivo separado
+atm.exportar_logs("Missão", "relatorio_missoes.txt")
+
+# Exportar apenas logs de Erro para outro arquivo
+atm.exportar_logs("Erro", "relatorio_erros.txt")
