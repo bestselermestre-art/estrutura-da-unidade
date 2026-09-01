@@ -1,0 +1,19 @@
+import matplotlib.pyplot as plt
+
+# Contadores
+total_missoes = 0
+total_erros = 0
+
+# Ler o arquivo de log
+with open("log_atm.txt", "r", encoding="utf-8") as f:
+    for linha in f:
+        if "Missão" in linha:
+            total_missoes += 1
+        elif "Erro" in linha:
+            total_erros += 1
+
+# Gráfico de barras
+plt.bar(["Missões", "Erros"], [total_missoes, total_erros], color=["green", "red"])
+plt.title("Resumo Estatístico ATM")
+plt.ylabel("Quantidade")
+plt.show()
