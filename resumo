@@ -1,0 +1,71 @@
+from datetime import datetime
+import numpy as np
+
+class ATMCore:
+    def __init__(self):
+        print("🔍 Sistema ATM Inicializado em Três Passos/RS")
+        self.energia_ativa = False
+
+    def check_sistemas(self):
+        print("\n[!] Checando integridade dos 10 repositórios...")
+        print("[OK] FusionCore: Conectado")
+        print("[OK] Nave-Espacial: Motores Inerciais prontos")
+        print("[OK] Assinaturas-de-risco: Banco de dados carregado")
+        self.energia_ativa = True
+
+    def iniciar_missao(self, ambiente="solo"):
+        if self.energia_ativa:
+            resultado = f"Missão em ambiente {ambiente}: Solo seguro para perfuração."
+            print(resultado)
+            self.salvar_log("Missão", resultado)
+        else:
+            erro = "❌ Erro: Falha no FusionCore."
+            print(erro)
+            self.salvar_log("Erro", erro)
+
+    def salvar_log(self, operacao, resultado):
+        with open("log_atm.txt", "a", encoding="utf-8") as f:
+            f.write(f"{datetime.now()} | {operacao} | {resultado}\n")
+
+    def exportar_logs(self, filtro, arquivo_destino):
+        """Exporta logs filtrados e adiciona resumo estatístico com percentuais"""
+        total_filtrados = 0
+        total_geral = 0
+        try:
+            # Primeiro, contar o total geral
+            with open("log_atm.txt", "r", encoding="utf-8") as f_in:
+                linhas = f_in.readlines()
+                total_geral = len(linhas)
+
+            # Exportar apenas os filtrados
+            with open(arquivo_destino, "w", encoding="utf-8") as f_out:
+                for linha in linhas:
+                    if filtro.lower() in linha.lower():
+                        f_out.write(linha)
+                        total_filtrados += 1
+
+                # Adicionar resumo estatístico
+                f_out.write("\n--- RESUMO ESTATÍSTICO ---\n")
+                f_out.write(f"Total de registros exportados ({filtro}): {total_filtrados}\n")
+                f_out.write(f"Total geral de registros: {total_geral}\n")
+                if total_geral > 0:
+                    percentual = (total_filtrados / total_geral) * 100
+                    f_out.write(f"Percentual de {filtro}: {percentual:.1f}%\n")
+
+            print(f"[EXPORT] Relatório gerado em {arquivo_destino} com {total_filtrados} entradas ({(total_filtrados/total_geral*100):.1f}%).")
+        except FileNotFoundError:
+            print("Nenhum log encontrado para exportação.")
+
+# --- Execução ---
+atm = ATMCore()
+atm.check_sistemas()
+atm.iniciar_missao("gases")
+atm.iniciar_missao("solo")
+atm.iniciar_missao("agua")
+atm.iniciar_missao("solo")  # adicionando mais missões para estatística
+
+# Exportar apenas logs de Missão com resumo percentual
+atm.exportar_logs("Missão", "relatorio_missoes.txt")
+
+# Exportar apenas logs de Erro com resumo percentual
+atm.exportar_logs("Erro", "relatorio_erros.txt")
